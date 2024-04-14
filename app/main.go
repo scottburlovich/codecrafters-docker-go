@@ -1,10 +1,8 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	// Uncomment this block to pass the first stage!
 	// "os"
 	// "os/exec"
@@ -20,31 +18,4 @@ func main() {
 	}
 
 	os.Exit(exitCode)
-}
-
-func runCommand(commandName string, args []string) (int, error) {
-	command := exec.Command(commandName, args...)
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-
-	err := command.Start()
-	if err != nil {
-		return 1, err
-	}
-	err = command.Wait()
-	if err != nil {
-		return determineExitCode(err), err
-	}
-
-	return 0, nil
-}
-
-func determineExitCode(err error) int {
-	var exitError *exec.ExitError
-
-	if errors.As(err, &exitError) {
-		return exitError.ExitCode()
-	} else {
-		return 1
-	}
 }
