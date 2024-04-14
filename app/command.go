@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"syscall"
 )
 
 func runCommand(commandName string, args []string) (int, error) {
@@ -13,12 +14,14 @@ func runCommand(commandName string, args []string) (int, error) {
 	}
 	defer cleanupSandbox(sandboxPath)
 
-	commandArgs := append([]string{"chroot", sandboxPath, commandName}, args...)
-
-	command := exec.Command(commandArgs[0], commandArgs[1:]...)
+	command := exec.Command(commandName, args...)
 	command.Stdin = os.Stdin
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
+	command.SysProcAttr = &syscall.SysProcAttr{
+		Chroot:     sandboxPath,
+		Cloneflags: syscall.CLONE_NEWPID | syscall.CLONE_NEWNET,
+	}
 
 	err = command.Start()
 	if err != nil {
