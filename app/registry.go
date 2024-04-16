@@ -10,10 +10,6 @@ import (
 	"time"
 )
 
-const (
-	authenticationUrl = "https://auth.docker.io/token?service=registry.docker.io&scope=repository:%s:pull"
-)
-
 type AuthToken struct {
 	AccessToken string `json:"access_token"`
 	Issued      string `json:"issued_at"`
