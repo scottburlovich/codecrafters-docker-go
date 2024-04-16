@@ -11,10 +11,6 @@ import (
 	"path/filepath"
 )
 
-const (
-	sandboxPathPrefix = storagePathPrefix + "/sandbox"
-)
-
 func sandbox(imageId string) (string, error) {
 	dir, err := createSandboxDir()
 	if err != nil {
