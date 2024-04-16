@@ -3,12 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
-	// Uncomment this block to pass the first stage!
-	// "os"
-	// "os/exec"
 )
 
-// Usage: your_docker.sh run <image> <command> <arg1> <arg2> ...
 func main() {
 	image := os.Args[2]
 	commandName := os.Args[3]
