@@ -77,10 +77,6 @@ func prepareSandbox(imageId, sandboxDir string) error {
 
 func copyDir(src string, dst string) error {
 	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
 		relativePath, err := filepath.Rel(src, path)
 		if err != nil {
 			return err
