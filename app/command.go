@@ -4,22 +4,25 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"path"
 	"syscall"
 )
 
-func runCommand(commandName string, args []string) (int, error) {
-	sandboxPath, err := sandbox()
+func runCommand(imageId, commandName string, args []string) (int, error) {
+	sandboxPath, err := sandbox(imageId)
 	if err != nil {
 		return 1, err
 	}
 	defer cleanupSandbox(sandboxPath)
+
+	sandboxRootFsPath := path.Join(sandboxPath, "rootfs")
 
 	command := exec.Command(commandName, args...)
 	command.Stdin = os.Stdin
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	command.SysProcAttr = &syscall.SysProcAttr{
-		Chroot:     sandboxPath,
+		Chroot:     sandboxRootFsPath,
 		Cloneflags: syscall.CLONE_NEWPID | syscall.CLONE_NEWNET,
 	}
 
